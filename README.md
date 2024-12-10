@@ -1,6 +1,6 @@
 ## DB Info
 
-- **mongoDB cluster URL** : `mongodb+srv://dotori_admin:isW6SLuHs19s6j3f@cluster0fordotori.qqazp.mongodb.net/`
+- **mongoDB cluster URL** : `mongodb+srv://dotori_admin:CjJxB4LYeBUnjzGZ@cluster0fordotori.qqazp.mongodb.net/`
 - **id** : `dotori_admin`
 - **password** : `CjJxB4LYeBUnjzGZ`
 
