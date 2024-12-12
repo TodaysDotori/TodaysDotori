@@ -1,0 +1,29 @@
+.location {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+.rotate-pin {
+    width: 18px;
+    animation: rotate 2s infinite linear;
+}
+
+.location-info {
+    margin-left: 0.5rem;
+    font-size: 1em;
+    color: #555;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(180deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
