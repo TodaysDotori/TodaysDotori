@@ -1,12 +1,16 @@
-$(function() {
-    console.log('publicBike.js is imported.') // 수정 시작하면 삭제해주세요.
+$(document).ready(() => {
+    const container = $('#bike-map');
+    const options = {
+        center: new kakao.maps.LatLng(lat, lon),
+        level: 3
+    };
+    const map = new kakao.maps.Map(container[0], options);
 
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
-        };
+    const markerPosition  = new kakao.maps.LatLng(lat, lon);
 
-    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+    const marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    marker.setMap(map);
 })
