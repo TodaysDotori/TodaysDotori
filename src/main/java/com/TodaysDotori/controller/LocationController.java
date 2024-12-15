@@ -1,6 +1,8 @@
 package com.TodaysDotori.controller;
 
 import com.TodaysDotori.service.LocationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,18 @@ public class LocationController {
     }
 
     @GetMapping(value = "reverse-geocode")
-    public ResponseEntity<String> getReverseGeocodeLocation(@RequestParam("lat") double lat, @RequestParam("lon") double lon) {
+    public ResponseEntity<String> getReverseGeocodeLocation(
+            @RequestParam("lat") double lat,
+            @RequestParam("lon") double lon,
+            HttpServletRequest request
+    ) {
         try {
             String address = locationService.getReverseGeocode(lat, lon);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("lat", lat); // 위도
+            session.setAttribute("lon", lon); // 경도
+
             return ResponseEntity.ok(address);
         } catch (Exception e) {
             e.printStackTrace();
