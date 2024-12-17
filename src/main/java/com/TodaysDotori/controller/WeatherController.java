@@ -4,17 +4,19 @@ import com.TodaysDotori.domain.Weather;
 import com.TodaysDotori.repository.WeatherRepository;
 import com.TodaysDotori.service.LocationService;
 import com.TodaysDotori.service.WeatherService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -25,35 +27,41 @@ public class WeatherController {
     private final WeatherRepository weatherRepository;
     private final WeatherService weatherService;
     private final LocationService locationService;
+    private final LocationController locationController;
 
     @Autowired
-    public WeatherController(WeatherRepository weatherRepository, WeatherService weatherService, LocationService locationService) {
+    public WeatherController(WeatherRepository weatherRepository, WeatherService weatherService, LocationService locationService, LocationController locationController) {
         this.weatherRepository = weatherRepository;
         this.weatherService = weatherService;
         this.locationService = locationService;
+        this.locationController = locationController;
     }
 
     @GetMapping("/today")
-    public String getWeather(Model model) {
+    public String getWeather(Model model, HttpServletRequest request) {
         try {
 
-//            String address = locationService.getReverseGeocode(lat, lon);
-//            String[] parts = address.split(" ");
-//
-//            System.out.println(parts[0] + parts[1] + parts[2]);
-//
-//            String administrativeLevel1 = parts[0];
-//            String administrativeLevel2 = parts[1];
-//            String administrativeLevel3 = parts[2];
-//
-//            Optional<Weather> locationOptional = weatherRepository.findByAdministrativeLevel1AndAdministrativeLevel2AndAdministrativeLevel3(
-//                    administrativeLevel1, administrativeLevel2, administrativeLevel3
-//            );
-//
-//            Weather location = locationOptional.orElseThrow(() -> new RuntimeException("Weather data not found"));
-//
+            HttpSession session = request.getSession();
+
+            String province = (String) session.getAttribute("province");
+            String city = (String) session.getAttribute("city");
+            String cityDistrict = (String) session.getAttribute("cityDistrict");
+
+            System.out.println("------------ province ->" + province);
+            System.out.println("------------ city ->" + city);
+            System.out.println("------------ cityDistrict ->" + cityDistrict);
+
+            Weather weatherQuery = new Weather();
+            weatherQuery.setAdministrativeLevel1(province);
+            weatherQuery.setAdministrativeLevel2(city);
+            weatherQuery.setAdministrativeLevel3(cityDistrict);
+
+            Optional<Weather> data = weatherRepository.findByAdministrativeLevel1AndAdministrativeLevel2AndAdministrativeLevel3(province, city, cityDistrict);
+
+            Weather weather = data.get();
+
             String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            String weatherData = weatherService.getWeather(today);
+            String weatherData = weatherService.getWeather(today, weather.getGridX(), weather.getGridY());
 
             model.addAttribute("today", today);
             model.addAttribute("weather", weatherData);
@@ -66,3 +74,4 @@ public class WeatherController {
         }
     }
 }
+

@@ -1,6 +1,7 @@
 package com.TodaysDotori.controller;
 
 import com.TodaysDotori.service.LocationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/location")
@@ -31,9 +34,23 @@ public class LocationController {
         try {
             String address = locationService.getReverseGeocode(lat, lon);
 
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> addressMap = objectMapper.readValue(address, Map.class);
+
+            // address 객체에서 필요한 값들 추출
+            Map<String, String> addressDetails = (Map<String, String>) addressMap.get("address");
+            String province = addressDetails.get("province");
+            String city = addressDetails.get("city");
+            String cityDistrict = addressDetails.get("city_district");
+
             HttpSession session = request.getSession();
+
             session.setAttribute("lat", lat); // 위도
             session.setAttribute("lon", lon); // 경도
+
+            session.setAttribute("province", province);
+            session.setAttribute("city", city);
+            session.setAttribute("cityDistrict", cityDistrict);
 
             return ResponseEntity.ok(address);
         } catch (Exception e) {

@@ -46,13 +46,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
 
-  // 네이티브 DNS 리졸버 (MacOS에서 네이티브 DNS 리졸버 사용)
+    // 네이티브 DNS 리졸버 (MacOS에서 네이티브 DNS 리졸버 사용)
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 	runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.70.Final'
 	implementation 'io.netty:netty-all:4.1.70.Final'
 
-  // JSON 파싱 라이브러리
-	implementation 'com.googlecode.json-simple:json-simple:1.1'
+    // JSON 파싱 라이브러리
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
 }
 
 tasks.named('test') {
