@@ -4,18 +4,21 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
-    private final String API_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";
     private final RestTemplate restTemplate;
 
     private String apiUrl = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";
@@ -29,7 +32,25 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public String getWeather(String today) throws IOException {
+    public String getWeather(String today, int nx, int ny) throws IOException {
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+        String currentTime = sdf.format(calendar.getTime());
+
+        String hourMinute = currentTime.substring(8, 12);
+
+        int minute = Integer.parseInt(hourMinute.substring(2, 4));
+
+        int roundedMinute = (minute / 10) * 10;
+        if (minute % 10 >= 5) {
+            roundedMinute += 10;
+        }
+
+        String baseTime = currentTime.substring(8, 10) + String.format("%02d", roundedMinute);
+
+        System.out.println("-------------------------------------- baseTime : " + baseTime);
+        System.out.println("-------------------------------------- nx : " + nx + " ny : " + ny);
 
         StringBuilder urlBuilder = new StringBuilder(apiUrl);
 
@@ -38,9 +59,9 @@ public class WeatherServiceImpl implements WeatherService {
         urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + "1000");
         urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + "JSON");
         urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + today);
-        urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + "0200");
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + 60);
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + 127);
+        urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + baseTime);
+        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + nx);
+        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + ny);
 
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -84,35 +105,35 @@ public class WeatherServiceImpl implements WeatherService {
                 System.out.println("Category: " + category);
                 System.out.println("Observation Value: " + value);
 
-                if ("T1H".equals(category)) {
+                if ("T1H".equals(category)) { // 기온
                     Double temperature = parseDoubleSafe(value);
                     System.out.println("Temperature: " + temperature + "°C");
                     result.append("Temperature: " + temperature + "°C\n");
-                } else if ("RN1".equals(category)) {
+                } else if ("RN1".equals(category)) { // 1시간 강수량
                     Double precipitation = parseDoubleSafe(value);
                     System.out.println("Precipitation: " + precipitation + "mm");
                     result.append("Precipitation: " + precipitation + "mm\n");
-                } else if ("WSD".equals(category)) {
+                } else if ("WSD".equals(category)) { // 풍속
                     Double windSpeed = parseDoubleSafe(value);
                     System.out.println("Wind Speed: " + windSpeed + "m/s");
                     result.append("Wind Speed: " + windSpeed + "m/s\n");
-                } else if ("REH".equals(category)) {
+                } else if ("REH".equals(category)) { // 습도
                     Double humidity = parseDoubleSafe(value);
                     System.out.println("Humidity: " + humidity + "%");
                     result.append("Humidity: " + humidity + "%\n");
-                } else if ("PTY".equals(category)) {
+                } else if ("PTY".equals(category)) { // 강수형태
                     Double pty = parseDoubleSafe(value);
                     System.out.println("Precipitation Type: " + pty);
                     result.append("Precipitation Type: " + pty + "\n");
-                } else if ("UUU".equals(category)) {
+                } else if ("UUU".equals(category)) { // 동서바람성분
                     Double uuu = parseDoubleSafe(value);
                     System.out.println("U/U Value: " + uuu);
                     result.append("U/U Value: " + uuu + "\n");
-                } else if ("VEC".equals(category)) {
+                } else if ("VEC".equals(category)) { // 풍향
                     Double windDirection = parseDoubleSafe(value);
                     System.out.println("Wind Direction: " + windDirection + "°");
                     result.append("Wind Direction: " + windDirection + "°\n");
-                } else if ("VVV".equals(category)) {
+                } else if ("VVV".equals(category)) { // 납북바람성분
                     Double vvv = parseDoubleSafe(value);
                     System.out.println("Visibility: " + vvv);
                     result.append("Visibility: " + vvv + "\n");
