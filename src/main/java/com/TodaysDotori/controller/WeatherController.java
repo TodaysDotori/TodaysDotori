@@ -43,20 +43,34 @@ public class WeatherController {
 
             HttpSession session = request.getSession();
 
-            String province = (String) session.getAttribute("province");
-            String city = (String) session.getAttribute("city");
-            String cityDistrict = (String) session.getAttribute("cityDistrict");
+            // 경기도
+            // String province = (String) session.getAttribute("province");
+            // String city = (String) session.getAttribute("city");
+            // String cityDistrict = (String) session.getAttribute("cityDistrict");
 
-            System.out.println("------------ province ->" + province);
+            // System.out.println("------------ province ->" + province);
+            // System.out.println("------------ city ->" + city);
+            // System.out.println("------------ cityDistrict ->" + cityDistrict);
+
+            // 서울특별시
+            String city = (String) session.getAttribute("city");
+            String borough = (String) session.getAttribute("borough");
+            String suburb = (String) session.getAttribute("suburb");
+
             System.out.println("------------ city ->" + city);
-            System.out.println("------------ cityDistrict ->" + cityDistrict);
+            System.out.println("------------ borough ->" + borough);
+            System.out.println("------------ suburb ->" + suburb);
+
+            suburb = suburb.replace('·', '.');
+            System.out.println("------------ change suburb ->" + suburb);
+
 
             Weather weatherQuery = new Weather();
-            weatherQuery.setAdministrativeLevel1(province);
-            weatherQuery.setAdministrativeLevel2(city);
-            weatherQuery.setAdministrativeLevel3(cityDistrict);
+            weatherQuery.setAdministrativeLevel1(city);
+            weatherQuery.setAdministrativeLevel2(borough);
+            weatherQuery.setAdministrativeLevel3(suburb);
 
-            Optional<Weather> data = weatherRepository.findByAdministrativeLevel1AndAdministrativeLevel2AndAdministrativeLevel3(province, city, cityDistrict);
+            Optional<Weather> data = weatherRepository.findByAdministrativeLevel1AndAdministrativeLevel2AndAdministrativeLevel3(city, borough, suburb);
 
             Weather weather = data.get();
 
