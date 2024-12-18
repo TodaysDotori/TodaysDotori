@@ -34,23 +34,32 @@ public class LocationController {
         try {
             String address = locationService.getReverseGeocode(lat, lon);
 
+            System.out.println("-------------------------> address : " + address );
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Object> addressMap = objectMapper.readValue(address, Map.class);
 
             // address 객체에서 필요한 값들 추출
             Map<String, String> addressDetails = (Map<String, String>) addressMap.get("address");
+
             String province = addressDetails.get("province");
             String city = addressDetails.get("city");
             String cityDistrict = addressDetails.get("city_district");
+
+            String borough = addressDetails.get("borough");
+            String suburb = addressDetails.get("suburb");
 
             HttpSession session = request.getSession();
 
             session.setAttribute("lat", lat); // 위도
             session.setAttribute("lon", lon); // 경도
 
-            session.setAttribute("province", province);
+//            session.setAttribute("province", province);
+//            session.setAttribute("city", city);
+//            session.setAttribute("cityDistrict", cityDistrict);
+
             session.setAttribute("city", city);
-            session.setAttribute("cityDistrict", cityDistrict);
+            session.setAttribute("borough", borough);
+            session.setAttribute("suburb", suburb);
 
             return ResponseEntity.ok(address);
         } catch (Exception e) {
