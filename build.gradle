@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+		languageVersion = JavaLanguageVersion.of(11)
 	}
 }
 
@@ -56,6 +56,11 @@ dependencies {
 
 }
 
+def compiler = javaToolchains.compilerFor {
+    languageVersion = JavaLanguageVersion.of(11)
+}
+
 tasks.named('test') {
+	javaCompilerExecutable = compiler.map { it.executablePath }
 	useJUnitPlatform()
 }
