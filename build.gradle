@@ -8,9 +8,7 @@ group = 'com.TodaysDotori'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+	sourceCompatibility = '17'
 }
 
 configurations {
@@ -56,11 +54,6 @@ dependencies {
 
 }
 
-def compiler = javaToolchains.compilerFor {
-    languageVersion = JavaLanguageVersion.of(17)
-}
-
 tasks.named('test') {
-	javaCompilerExecutable = compiler.map { it.executablePath }
 	useJUnitPlatform()
 }
