@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+    //zip파일 압축 해제 후부터 / 폴더에 대하여
+      - source: /
+      //ec2의 /home/ubuntu/jenkins로 복사하겠다.
+      destination: /home/ubuntu/jenkins
+      overwrite: true
+hooks:
+  //application stop을 위한 script
+  ApplicationStop:
+      - location: scripts/stop_server.sh
+        timeout: 300
+  //application start를 위한 script
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
