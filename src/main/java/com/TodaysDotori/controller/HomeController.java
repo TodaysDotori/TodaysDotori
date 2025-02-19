@@ -1,4 +1,4 @@
-package com.TodaysDotori;
+package com.TodaysDotori.controller;
 
 import com.TodaysDotori.controller.LocationController;
 import com.TodaysDotori.controller.WeatherController;
@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 @Controller
 public class HomeController {
 
@@ -36,7 +35,6 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, HttpServletRequest request) {
         try {
-
             weatherController.getWeather(model, request);
 
             return "index";
