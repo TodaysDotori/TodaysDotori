@@ -40,7 +40,6 @@ public class WeatherController {
     @GetMapping("/today")
     public String getWeather(Model model, HttpServletRequest request) {
         try {
-
             HttpSession session = request.getSession();
 
             // 경기도
@@ -63,7 +62,6 @@ public class WeatherController {
 
             suburb = suburb.replace('·', '.');
             System.out.println("------------ change suburb ->" + suburb);
-
 
             Weather weatherQuery = new Weather();
             weatherQuery.setAdministrativeLevel1(city);

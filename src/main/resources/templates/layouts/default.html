@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Todays Dotori</title>
+    <th:block th:replace="~{fragments/common/headerImport :: HeaderImportFragment}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<th:block th:replace="~{fragments/common/header :: Header}"></th:block>
+<div layout:fragment="content" class="content"></div>
+<th:block th:replace="~{fragments/common/footer :: Footer}"></th:block>
+</body>
+</html>
