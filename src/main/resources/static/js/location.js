@@ -6,7 +6,7 @@ const getLocationInfo = () => {
                 const lon = position.coords.longitude; // 경도
 
                 $.ajax({
-                    url: '/location/reverse-geocode',
+                    url: '/api/location/reverse-geocode',
                     method: 'GET',
                     data: {lat, lon},
                     success: function (data) {

@@ -1,0 +1,5 @@
+.bike-map {
+    height: 400px;
+    border-radius: 8px;
+    background: url('https://placehold.co/1200x400') center center / cover no-repeat;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<body>
+<div layout:fragment="content">
+    <main id="main" class="main container">
+        <div class="pagetitle">
+            <!-- location info -->
+            <th:block th:replace="~{fragments/location :: LocationFragment}"></th:block>
+
+            <!-- weather info -->
+            <th:block th:replace="~{fragments/weather :: WeatherFragment}"></th:block>
+
+            <!-- subway info -->
+            <th:block th:replace="~{fragments/subway :: SubwayFragment}"></th:block>
+
+            <!-- bus info -->
+            <th:block th:replace="~{fragments/bus :: BusFragment}"></th:block>
+
+            <!-- public bike info -->
+            <th:block th:replace="~{fragments/publicBike :: PublicBikeFragment}"></th:block>
+        </div>
+    </main>
+</div>
+</body>
+</html>

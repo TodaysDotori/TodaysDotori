@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="LocationFragment">
+    <script th:src="@{/js/location.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/css/location.css}">
+
+    <section class="location">
+        <img class="rotate-pin" th:src="@{/image/locationPin.svg}" alt="locationPin">
+        <p id="location-info">위치를 불러오는 중</p>
+    </section>
+</th:block>

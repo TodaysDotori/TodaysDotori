@@ -1,8 +1,5 @@
 package com.TodaysDotori.controller;
 
-import com.TodaysDotori.controller.LocationController;
-import com.TodaysDotori.controller.WeatherController;
-import com.TodaysDotori.domain.Weather;
 import com.TodaysDotori.repository.WeatherRepository;
 import com.TodaysDotori.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,12 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 @Controller
 public class HomeController {
 
@@ -35,8 +27,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, HttpServletRequest request) {
         try {
-            weatherController.getWeather(model, request);
-
+            // TODO 확인 필요 weatherController.getWeather(model, request);
             return "index";
         } catch (Exception e) {
             e.printStackTrace();
