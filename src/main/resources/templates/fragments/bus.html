@@ -6,6 +6,91 @@
     <link rel="stylesheet" th:href="@{/css/bus.css}">
 
     <section class="section">
-        버스 area
+        <!-- 버스정류장 -->
+        <div class="bus-search-wrapper">
+            <!-- 버스 또는 정류장 검색 버튼 -->
+            <button type="button" id="search-bus-stop-btn" class="search-btn" data-toggle="modal"
+                    data-target=".near-stop-modal">
+                <i class="fas fa-search"></i> 버스 또는 정류장 검색
+            </button>
+            <!-- 주변 정류장 버튼 -->
+            <button id="find-near-stop-btn" class="near-stop-btn">
+                <i class="fas fa-bus"></i> 주변 정류장
+            </button>
+        </div>
+
+        <div class="favorite-bus-wrapper">
+            <div class="favorite-bus-sidebar">
+                <!-- 즐겨찾기 버스/정류장 버튼들 -->
+                <button class="favorite-bus-btn active" id="favorite-bus-btn">
+                    <i class="bi bi-bus-front"></i>
+                </button>
+                <button class="favorite-stop-btn" id="favorite-stop-btn">
+                    <i class="bi bi-pin-map"></i>
+                </button>
+            </div>
+
+            <div class="favorite-bus-content">
+                <!-- 여기에 선택된 정보가 출력됨 -->
+                <div id="bus-info">
+                    <!-- 예시로 즐겨찾기된 버스 정보들 -->
+                    <ul>
+                        <li>버스 100번</li>
+                        <li>버스 200번</li>
+                        <li>작업해야함!!</li>
+                    </ul>
+                </div>
+                <div id="stop-info" style="display: none;">
+                    <!-- 예시로 즐겨찾기된 정류장 정보들 -->
+                    <ul>
+                        <li>서울역</li>
+                        <li>강남역</li>
+                        <li>작업해야함!!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </section>
+
+    <!-- 주변 정류장 모달창 -->
+    <div class="modal fade near-stop-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <i class="bi bi-pin-map"></i>
+                    <h5 class="modal-title">주변 정류장 목록</h5>
+                    <span class="bus-stop-location">노원구 상계8동(📍TODO📍)</span>
+                </div>
+                <div class="modal-body">
+                    <div class="bus-stop-list-container">
+                        <div id="bus-stop-list" class="bus-stop-list"></div>
+                    </div>
+                    <div id="bus-stop-map" class="bus-stop-map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메세지용 Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet 지도 라이브러리 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </th:block>
