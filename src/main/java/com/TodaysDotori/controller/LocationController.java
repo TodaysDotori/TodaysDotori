@@ -4,8 +4,7 @@ import com.TodaysDotori.service.LocationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/api/location")
 public class LocationController {
-    private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
-
     private final LocationService locationService;
     private final ObjectMapper objectMapper;
 
@@ -36,12 +34,17 @@ public class LocationController {
             HttpServletRequest request
     ) {
         try {
+            log.info("lat : {}, lon : {}", lat, lon);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("lat", lat);
+            session.setAttribute("lon", lon);
+
             String addressJson = locationService.getReverseGeocode(lat, lon);
             Map<String, Object> addressMap = objectMapper.readValue(addressJson, Map.class);
             Map<String, String> addressDetails = (Map<String, String>) addressMap.get("address");
 
-            HttpSession session = request.getSession();
-            saveLocationToSession(session, lat, lon, addressDetails);
+            saveLocationToSession(session, addressDetails);
 
             return ResponseEntity.ok(addressJson);
         } catch (IOException e) {
@@ -50,11 +53,7 @@ public class LocationController {
         }
     }
 
-    private void saveLocationToSession(HttpSession session, double lat, double lon, Map<String, String> addressDetails) {
-        logger.info("lat : {}, lon : {}", lat, lon);
-
-        session.setAttribute("lat", lat);
-        session.setAttribute("lon", lon);
+    private void saveLocationToSession(HttpSession session, Map<String, String> addressDetails) {
         session.setAttribute("city", addressDetails.get("city"));
         session.setAttribute("borough", addressDetails.get("borough"));
         session.setAttribute("suburb", addressDetails.get("suburb"));
