@@ -11,11 +11,11 @@
             <!-- 버스 또는 정류장 검색 버튼 -->
             <button type="button" id="search-bus-stop-btn" class="search-btn" data-toggle="modal"
                     data-target=".near-stop-modal">
-                <i class="fas fa-search"></i> 버스 또는 정류장 검색
+                버스 또는 정류장 검색
             </button>
             <!-- 주변 정류장 버튼 -->
             <button id="find-near-stop-btn" class="near-stop-btn">
-                <i class="fas fa-bus"></i> 주변 정류장
+                주변 정류장
             </button>
         </div>
 
@@ -31,9 +31,7 @@
             </div>
 
             <div class="favorite-bus-content">
-                <!-- 여기에 선택된 정보가 출력됨 -->
                 <div id="bus-info">
-                    <!-- 예시로 즐겨찾기된 버스 정보들 -->
                     <ul>
                         <li>버스 100번</li>
                         <li>버스 200번</li>
@@ -41,12 +39,9 @@
                     </ul>
                 </div>
                 <div id="stop-info" style="display: none;">
-                    <!-- 예시로 즐겨찾기된 정류장 정보들 -->
-                    <ul>
-                        <li>서울역</li>
-                        <li>강남역</li>
-                        <li>작업해야함!!</li>
-                    </ul>
+                    <div id="favorite-bus-list">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,8 +84,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Leaflet 지도 라이브러리 -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </th:block>

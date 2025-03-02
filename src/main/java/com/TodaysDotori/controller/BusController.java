@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,9 +22,9 @@ public class BusController {
     private final BusService busService;
 
     @GetMapping(value = "/getNearBusStop")
-    public ResponseEntity<?> test(
+    public ResponseEntity<?> getNearBusStop(
             HttpServletRequest request
-    ) throws IOException {
+    ) {
         HttpSession session = request.getSession();
 
         // 세션에서 lat, lon 값 가져옴
@@ -43,6 +43,15 @@ public class BusController {
         List<BusStop> busStops = busService.getNearBusStopByPos(lat, lon);
 
         return ResponseEntity.ok(busStops);
+    }
+
+    @GetMapping(value = "/arrivalBusInfo")
+    public ResponseEntity<?> getArrivalBusInfo(
+            @RequestParam("stopId") String stopId
+    ) {
+        busService.getArrivalBusInfo(stopId);
+
+        return null;
     }
 }
 

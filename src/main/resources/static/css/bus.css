@@ -124,6 +124,23 @@
     display: none;
 }
 
+.remove-favorite-bus-stop-btn {
+    cursor: pointer;
+    color: red;
+}
+
+#stop-info .favorite-stop {
+    display: flex;
+}
+
+#stop-info .favorite-stop .favorite-stop-name {
+    font-weight: bold;
+}
+
+#stop-info .remove-favorite-bus-stop-btn {
+    margin-left: auto;
+}
+
 /************************************************************* 버스 정류소 모달 CSS */
 .near-stop-modal .modal-header {
     display: flex;

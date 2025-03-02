@@ -1,5 +1,6 @@
 package com.TodaysDotori.client.bus;
 
+import com.TodaysDotori.dto.bus.SeoulArrivalBusInfo;
 import com.TodaysDotori.dto.bus.SeoulBusStop;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -68,6 +69,40 @@ public class SeoulBusClient {
         return parseJson(sb.toString());
     }
 
+    public SeoulArrivalBusInfo getStationByUidItem(String arsId) throws IOException {
+        String resultType = "json"; // "json" or "xml"
+
+        StringBuilder urlBuilder = new StringBuilder("http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid"); /*URL*/
+        urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=").append(ENCODE_BUS_API_KEY);
+        urlBuilder.append("&").append(URLEncoder.encode("arsId", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(arsId, StandardCharsets.UTF_8)); /*정류소 번호*/
+        urlBuilder.append("&").append(URLEncoder.encode("resultType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(resultType), StandardCharsets.UTF_8));
+
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+
+        System.out.println("Response code: " + conn.getResponseCode());
+
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+
+        rd.close();
+        conn.disconnect();
+
+        return makeSeoulBusArrivalInfo(sb.toString());
+    }
+
     /**
      * JSON 응답을 List<SeoulBusStop>으로 변환
      */
@@ -114,5 +149,37 @@ public class SeoulBusClient {
         }
 
         return busStops;
+    }
+
+    private SeoulArrivalBusInfo makeSeoulBusArrivalInfo(String jsonResponse) {
+        SeoulArrivalBusInfo seoulArrivalBusInfo = new SeoulArrivalBusInfo();
+
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonResponse);
+
+            // msgBody 추출
+            JSONObject msgBody = (JSONObject) jsonObject.get("msgBody");
+            if (msgBody == null) {
+                return null;
+            }
+
+            // itemList 배열 추출
+            JSONArray itemList = (JSONArray) msgBody.get("itemList");
+            if (itemList == null) {
+                return null;
+            }
+
+            for (Object obj : itemList) {
+                JSONObject item = (JSONObject) obj;
+                // TODO 객체 매핑 로직 부터 작업하면됨
+                System.out.println("=======> item : " + item);
+            }
+
+        } catch (ParseException e) {
+            log.error("JSON 파싱 오류: {}", e.getMessage());
+        }
+
+        return seoulArrivalBusInfo;
     }
 }

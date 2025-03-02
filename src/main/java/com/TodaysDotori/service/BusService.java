@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface BusService {
     List<BusStop> getNearBusStopByPos(double lat, double lon);
+
+    void getArrivalBusInfo(String stopId);
 }

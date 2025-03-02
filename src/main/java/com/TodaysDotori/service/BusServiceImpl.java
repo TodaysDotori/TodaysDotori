@@ -35,4 +35,13 @@ public class BusServiceImpl implements BusService {
 
         return busStopList;
     }
+
+    @Override
+    public void getArrivalBusInfo(String stopId) {
+        try {
+            seoulBusClient.getStationByUidItem(stopId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
